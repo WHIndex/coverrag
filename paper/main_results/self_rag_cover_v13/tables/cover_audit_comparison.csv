@@ -1,0 +1,4 @@
+dataset,tag,model,shot,ndoc,answer_length,str_em,str_hit,qa_f1,rougeLsum,mauve,claims_nli,num_preds,qampari_prec,qampari_rec,qampari_rec_top5,qampari_f1,qampari_f1_top5,citation_recall,citation_precision,claim_citation_recall,claim_citation_precision,claim_citation_sentence_recall,claim_count,claim_support_rate,claim_support_rate_macro,claim_unsupported_rate,avg_claims_per_example,no_citation_claim_count,wrong_missing_citation_claim_count
+asqa,gtr,gpt-4o-mini,2,5,32.7932,41.9778,16.5612,33.0726,36.8412,63.4740,,,,,,,,77.9800,64.5221,53.7634,54.6882,31.4140,4092,53.7634,52.4702,46.2366,4.3165,1,1856
+eli5,bm25,gpt-4o-mini,2,5,73.6320,0.0000,0.0000,,21.3371,19.1540,18.6000,,,,,,,52.5679,40.2063,63.9324,66.5373,39.9609,9704,63.9324,63.5232,36.0676,9.7040,4,3266
+qampari,gtr,gpt-4o-mini,2,5,8.2110,0.0000,0.0000,,,,,3.4290,32.3654,13.1552,22.4400,16.6022,24.3220,35.8761,35.8009,27.0467,27.1093,25.4925,3579,27.0467,27.8469,72.9533,3.5790,0,2566

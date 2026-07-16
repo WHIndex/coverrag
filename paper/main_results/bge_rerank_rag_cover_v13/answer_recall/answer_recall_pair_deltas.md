@@ -1,0 +1,5 @@
+| dataset | before | after | total_units | before_hit_units | after_hit_units | before_recall | after_recall | recall_delta | kept | lost | gained | missed_by_both | lost_rate | gain_rate |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| asqa | base_raw | v3 | 3184 | 1291 | 1337 | 40.5465 | 41.9912 | 1.4447 | 1291 | 0 | 46 | 1847 | 0.0000 | 1.4447 |
+| eli5 | base_raw | v3 | 3000 | 616 | 633 | 20.5333 | 21.1000 | 0.5667 | 616 | 0 | 17 | 2367 | 0.0000 | 0.5667 |
+| qampari | base_raw | v3 | 14429 | 1375 | 1430 | 9.5294 | 9.9106 | 0.3812 | 1345 | 30 | 85 | 12969 | 0.2079 | 0.5891 |

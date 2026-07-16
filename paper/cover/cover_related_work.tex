@@ -1,0 +1,23 @@
+\section{Related Work}
+\label{sec:related_work}
+
+\subsection{Retrieval-Augmented Generation}
+
+RAG grounds language models in non-parametric evidence and has been advanced through dense retrieval, sparse retrieval, reranking, retrieval-augmented pretraining, and multi-passage generation~\cite{guu2020retrieval,lewis2020retrieval,karpukhin2020dense,izacard2021leveraging,izacard2023atlas,borgeaud2022improving,robertson2009probabilistic,nogueira2019passage}. These methods improve the chance that useful evidence appears in the context window. However, they mostly optimize retrieval relevance or context quality. They do not guarantee that every factual claim in the final answer is supported by the evidence that is retrieved or cited.
+
+\subsection{Adaptive and Corrective RAG}
+
+Adaptive and self-corrective RAG methods decide when to retrieve, critique evidence, revise generations, or interleave retrieval with reasoning~\cite{asai2024self,yan2024corrective,jeong2024adaptive,shao2023enhancing,trivedi2023interleaving,yao2023react}. These systems move beyond one-shot retrieve-then-generate pipelines. Their control signals, however, are commonly defined over retrieval actions, passage utility, generated responses, or reasoning states. \textsc{CoverRAG} is complementary: it defines the control state over atomic answer claims and their evidence coverage.
+
+\subsection{Attributed Generation and Citation Evaluation}
+
+Attributed generation aims to make generated answers verifiable by linking them to sources~\cite{bohnet2022attributed,gao2023enabling,gao2023rarr}. Prior work shows that citations should be evaluated rather than treated as surface markers of reliability. Yet sentence-level citation evaluation can miss mixed-support sentences, where one cited source supports only part of a sentence. \textsc{CoverRAG} moves attribution to the claim level: each atomic claim is verified against evidence, and citation assignment is constrained by claim support.
+
+\subsection{Factuality Verification and Claim Decomposition}
+
+Fact verification and factuality evaluation provide tools for detecting unsupported content~\cite{thorne2018fever,min2023factscore,manakul2023selfcheckgpt,dhuliawala2024chain}. These methods often decompose generations into checkable facts or ask verification questions. \textsc{CoverRAG} uses such tools as part of an inference-time controller: verification results are not only scores, but actions that determine whether to preserve, repair, retrieve for, or suppress a claim.
+
+\subsection{Knowledge- and Graph-Enhanced RAG}
+
+Recent graph- and knowledge-enhanced RAG systems organize external evidence with graph structures, entity relations, or multimodal sources~\cite{edge2024local,guo2024lightrag,wang2024knowledge,zhao2024kg,chen2022murag}. These approaches improve evidence access and reasoning structure. \textsc{CoverRAG} is orthogonal to the evidence backend: its abstraction is the coverage relation between answer claims and evidence units. The same controller can be layered above text retrievers, rerankers, document graphs, or knowledge-graph retrieval systems.
+

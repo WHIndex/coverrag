@@ -1,0 +1,84 @@
+\section{Related Work}
+\label{sec:related_work}
+
+% This section reviews prior work from the perspective of evidence control in retrieval-augmented generation. Rather than surveying all variants of RAG, we focus on five lines of work most relevant to COVER-RAG: retrieval-augmented generation, self-corrective and iterative RAG, attributed generation and citation evaluation, factuality verification and claim decomposition, and knowledge-enhanced generation. Across these areas, our central observation is that existing methods improve retrieval, reflection, attribution, or structured grounding, but they do not explicitly model generation as a claim-level evidence coverage problem.
+% % 中文：本节从检索增强生成中的证据控制角度回顾已有研究，而不是面面俱到地罗列所有 RAG 变体。我们重点讨论与 COVER-RAG 最相关的五类工作：检索增强生成、自纠错与迭代式 RAG、带引用生成与引用评估、事实性验证与 claim 拆解、以及知识增强生成。贯穿这些方向的核心观察是：已有方法分别提升了检索、反思、引用、事实验证或结构化 grounding，但它们并没有显式地将生成过程建模为 claim-level evidence coverage 问题。
+
+% In this section, we review the related works, including XXX.
+In this section, we review prior work most relevant to \ragname and situate our framework against existing approaches.
+
+\subsection{Retrieval-Augmented Generation}
+\label{subsec:related_rag}
+
+Retrieval-augmented generation (RAG) grounds parametric language models in non-parametric external memory to improve knowledge-intensive generation~\cite{guu2020retrieval,lewis2020retrieval}. Prior work has advanced this paradigm through stronger retrieval, reranking, retrieval-augmented pre-training, multi-passage context aggregation, and large-scale retrieval-enhanced language modeling~\cite{karpukhin2020dense,izacard2021leveraging,izacard2023atlas,borgeaud2022improving,robertson2009probabilistic,nogueira2019passage}. While these methods improve the quality and coverage of retrieved context, they mainly operate at the document or passage level. They do not explicitly model whether the generated answer's atomic factual claims are individually supported by sufficient evidence. \ragname addresses this gap by treating existing retrievers and rerankers as evidence providers and adding a claim-level verification controller on top.
+% 中文：检索增强生成通过将参数化语言模型建立在非参数化外部记忆之上，提升知识密集型生成能力。已有工作从更强的检索、重排序、检索增强预训练、多段落上下文聚合以及大规模检索增强语言建模等方面推进了这一范式。尽管这些方法提升了检索上下文的质量和覆盖范围，但它们主要仍在文档或段落层面工作，并没有显式建模生成答案中的原子事实声明是否分别被充分证据支持。\ragname 针对这一缺口，将已有检索器和重排序器视为证据提供器，并在其上加入 claim-level verification controller。
+
+\subsection{Self-Corrective and Iterative RAG}
+\label{subsec:related_self_corrective}
+
+Self-corrective and iterative RAG methods make retrieval adaptive by enabling models to retrieve on demand, critique evidence or generations, revise outputs, and interleave retrieval with reasoning or external actions~\cite{asai2024self,yan2024corrective,shao2023enhancing,trivedi2023interleaving,yao2023react}. While these methods improve retrieval control beyond one-shot RAG, their control signals are usually defined at the level of retrieval actions, passage utility, generated responses, or reasoning states. They do not explicitly control generation through the coverage relation between atomic answer claims and supporting evidence. \ragname addresses this gap by using claim-level verification results as a structured control signal for targeted retrieval, answer revision, and citation-constrained generation.
+% 中文：自纠错式和迭代式 RAG 方法通过按需检索、批判证据或生成结果、修订输出，以及将检索与推理或外部动作交替执行，使检索过程具备自适应性。尽管这些方法相比一次性 RAG 改进了检索控制，但其控制信号通常仍定义在检索动作、段落效用、生成回答或推理状态层面。它们并没有通过原子答案声明与支持证据之间的覆盖关系来显式控制生成过程。\ragname 针对这一缺口，将 claim-level verification results 作为结构化控制信号，用于定向检索、答案修订和引用约束生成。
+
+\subsection{Attributed Generation and Citation Evaluation}
+\label{subsec:related_attribution}
+
+Attributed generation and citation evaluation seek to make generated answers verifiable by linking them to supporting sources and assessing citation faithfulness~\cite{bohnet2022attributed,gao2023enabling,gao2023rarr}. These works highlight that citations must be evaluated rather than treated as surface indicators of reliability. However, they commonly operate at the sentence, citation-span, or post-hoc revision level, where a citation may support only part of a sentence while leaving other factual claims unsupported. \ragname addresses this limitation by moving attribution to the claim level.
+% : atomic factual claims are verified against evidence, and the resulting coverage map serves as a control structure for targeted retrieval, answer revision, and citation-constrained generation.
+% 中文：带引用生成和引用评估旨在通过将生成答案连接到支持来源，并评估引用忠实性，使生成结果具备可验证性。这类工作表明，引用不能被当作表面上的可靠性标记，而必须被实际评估。然而，它们通常工作在句子、引用片段或生成后修订层面，此时某个引用可能只支持句子中的一部分内容，而其他事实声明仍然缺乏证据。\ragname 针对这一局限，将 attribution 推进到 claim level：系统逐一验证原子事实声明是否被证据支持，并将得到的 coverage map 作为控制结构，用于定向检索、答案修订和引用约束生成。
+
+There are also excellent works on knowledge-enhanced, graph-based, and multimodal GenAI~\cite{edge2024local,guo2024lightrag,wang2024knowledge,zhao2024kg,chen2022murag,hui2024uda,liu2020k,yasunaga2021qa,marino2019ok,mathew2021docvqa}. However, these works are beyond the scope of our discussion.
+% 中文：此外，知识增强、图增强和多模态 GenAI 方向也有许多优秀工作，包括图结构检索、知识图谱推理、多模态检索增强生成，以及面向文本、表格、图像、版面和其他非文本证据的文档理解。这些工作扩展了外部证据的结构形式和模态范围，而本文关注的是以文本为中心的 RAG 中的 claim-level evidence coverage。因此，对这些方向的详细讨论超出了本文范围。
+
+% \subsection{Factuality Verification and Claim Decomposition}
+% \label{subsec:related_verification}
+
+% Factual verification has a long history in natural language processing. FEVER formulates fact verification as retrieving evidence and classifying a claim as supported, refuted, or not enough information~\cite{thorne2018fever}. Recent work on long-form generation has moved toward finer-grained factuality assessment. FActScore decomposes long-form generations into atomic facts and estimates the fraction supported by a reliable knowledge source~\cite{min2023factscore}. SelfCheckGPT detects hallucination by measuring consistency across sampled generations without relying on an external database~\cite{manakul2023selfcheckgpt}. Chain-of-Verification drafts an answer, plans verification questions, answers them independently, and generates a revised response to reduce hallucination~\cite{dhuliawala2024chain}.
+% % 中文：事实验证在自然语言处理领域已有较长研究历史。FEVER 将事实验证形式化为检索证据，并将 claim 分类为 supported、refuted 或 not enough information。近期关于长文本生成的研究进一步走向更细粒度的事实性评估。FActScore 将长文本生成结果拆解为 atomic facts，并估计其中有多少比例被可靠知识源支持。SelfCheckGPT 通过比较多次采样生成之间的一致性来检测幻觉，且不依赖外部数据库。Chain-of-Verification 则先生成草稿答案，再规划验证问题，独立回答这些问题，并生成修订后的响应，从而降低幻觉。
+
+% These methods provide important tools for detecting unsupported content, but they are often used as evaluators, post-hoc checkers, or prompt-level verification loops. They do not, by themselves, specify how verification results should change retrieval, evidence selection, citation assignment, and final answer construction. COVER-RAG integrates claim decomposition and verification into the RAG control loop: unsupported claims become retrieval targets, contradicted claims become candidates for removal or correction, and supported claims become the admissible units for citation-constrained generation.
+% % 中文：这些方法为检测未被支持的内容提供了重要工具，但它们通常作为评估器、生成后检查器或 prompt-level verification loop 使用。它们本身并不规定验证结果应当如何改变检索、证据选择、引用分配和最终答案构造。COVER-RAG 将 claim decomposition 和 verification 集成到 RAG 控制循环中：unsupported claims 会变成检索目标，contradicted claims 会成为删除或修正候选，被支持的 claims 则成为 citation-constrained generation 中允许进入最终答案的基本单元。
+
+% \subsection{Knowledge-Enhanced and Graph-Based GenAI}
+% \label{subsec:related_knowledge_graph}
+
+% Knowledge-enhanced generation aims to improve grounding by incorporating structured data, entity relations, or graph-based reasoning. GraphRAG constructs graph indexes over source documents and uses community-level summaries to support query-focused summarization over large corpora~\cite{edge2024local}. Knowledge Graph Prompting builds graphs over multiple documents and traverses them to collect supporting passages for multi-document question answering~\cite{wang2024knowledge}. KG-CoT uses knowledge graph reasoning paths to support knowledge-aware question answering with large language models~\cite{zhao2024kg}. These approaches show that graph structures can help organize evidence beyond flat passage retrieval, especially for multi-hop and global sensemaking tasks.
+% % 中文：知识增强生成旨在通过结构化数据、实体关系或基于图的推理来提升 grounding。GraphRAG 在源文档上构建图索引，并利用 community-level summaries 支持大规模语料上的 query-focused summarization。Knowledge Graph Prompting 在多文档上构建图，并通过图遍历收集支持多文档问答的段落。KG-CoT 使用知识图谱推理路径来支持大语言模型进行知识感知问答。这些方法表明，图结构能够帮助组织超越扁平段落检索的证据，尤其适合多跳问题和全局理解任务。
+
+% The focus of these methods is primarily on improving the structure and reach of retrieval or reasoning. They do not necessarily guarantee that the final natural-language answer is decomposed into atomic claims and checked against the retrieved graph or text evidence. COVER-RAG can be viewed as a general controller that sits above different evidence backends, including text corpora, vector indexes, document graphs, and knowledge graphs. Its core abstraction is not the type of index, but the coverage relation between answer claims and evidence units.
+% % 中文：这些方法的重点主要在于提升检索或推理的结构性与覆盖范围。它们并不必然保证最终自然语言答案会被拆解为原子 claim，并逐条与检索到的图证据或文本证据进行检查。COVER-RAG 可以被视为一个通用控制器，位于不同证据后端之上，包括文本语料、向量索引、文档图和知识图谱。它的核心抽象不是索引类型，而是答案 claim 与证据单元之间的覆盖关系。
+
+% \subsection{Position of COVER-RAG}
+% \label{subsec:related_position}
+
+% In summary, prior work has substantially advanced RAG along several axes: stronger retrieval, richer context aggregation, iterative retrieval and revision, attribution evaluation, factuality verification, and graph-based grounding. COVER-RAG is motivated by a remaining gap across these directions: the lack of an explicit generation-time structure that records which atomic claims are supported, which are contradicted, and which remain uncovered. By formulating RAG as claim-level evidence coverage, COVER-RAG turns verification from a post-hoc diagnostic into a control signal for retrieval, generation, citation, and failure localization.
+% % 中文：总结来看，已有工作从多个方向显著推进了 RAG：更强的检索、更丰富的上下文聚合、迭代式检索与修订、归因评估、事实性验证以及基于图的 grounding。COVER-RAG 的动机来自这些方向中仍然存在的共同缺口：缺少一种生成时的显式结构，用来记录哪些原子 claims 被支持、哪些被反驳、哪些仍然没有被覆盖。通过将 RAG 形式化为 claim-level evidence coverage，COVER-RAG 将验证从生成后的诊断工具转化为检索、生成、引用和失败定位的控制信号。
+
+% ----------------------------------------------------------------------
+% Citation-source mapping for the current Related Work draft.
+% This block is not part of the manuscript; it is kept here only to help
+% map citation keys to original papers while drafting.
+%
+% guu2020realm                -> REALM: Retrieval-Augmented Language Model Pre-Training
+% lewis2020retrieval          -> Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks
+% karpukhin2020dense          -> Dense Passage Retrieval for Open-Domain Question Answering
+% izacard2021leveraging       -> Leveraging Passage Retrieval with Generative Models for Open Domain Question Answering
+% izacard2023atlas            -> Atlas: Few-shot Learning with Retrieval Augmented Language Models
+% borgeaud2022improving       -> Improving Language Models by Retrieving from Trillions of Tokens
+% robertson2009probabilistic  -> The Probabilistic Relevance Framework: BM25 and Beyond
+% nogueira2019passage         -> Passage Re-ranking with BERT
+% liu2024lost                 -> Lost in the Middle: How Language Models Use Long Contexts
+% asai2024selfrag             -> Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection
+% yan2024corrective           -> Corrective Retrieval Augmented Generation
+% shao2023enhancing           -> Enhancing Retrieval-Augmented Large Language Models with Iterative Retrieval-Generation Synergy
+% trivedi2023interleaving     -> Interleaving Retrieval with Chain-of-Thought Reasoning for Knowledge-Intensive Multi-Step Questions
+% yao2023react                -> ReAct: Synergizing Reasoning and Acting in Language Models
+% bohnet2022attributed        -> Attributed Question Answering: Evaluation and Modeling for Attributed Large Language Models
+% gao2023enabling             -> Enabling Large Language Models to Generate Text with Citations
+% gao2023rarr                 -> RARR: Researching and Revising What Language Models Say, Using Language Models
+% thorne2018fever             -> FEVER: a Large-scale Dataset for Fact Extraction and VERification
+% min2023factscore            -> FActScore: Fine-grained Atomic Evaluation of Factual Precision in Long Form Text Generation
+% manakul2023selfcheckgpt     -> SelfCheckGPT: Zero-Resource Black-Box Hallucination Detection for Generative Large Language Models
+% dhuliawala2023chain         -> Chain-of-Verification Reduces Hallucination in Large Language Models
+% edge2024graphrag            -> From Local to Global: A Graph RAG Approach to Query-Focused Summarization
+% wang2023knowledge           -> Knowledge Graph Prompting for Multi-Document Question Answering
+% zhao2024kgcot               -> KG-CoT: Chain-of-Thought Prompting of Large Language Models over Knowledge Graphs for Knowledge-Aware Question Answering

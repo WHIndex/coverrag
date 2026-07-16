@@ -1,0 +1,10 @@
+dataset,version,main_correctness,main_recall,sentence_citation_recall,sentence_citation_precision,claim_citation_recall,claim_citation_precision,claim_sentence_recall,claim_support,source
+asqa,base_raw,45.2989,43.1219,73.8555,59.8295,,,,,/home/wanghui/rag/CoverRAG/alce/result/origin/asqa-gpt-4o-mini-gtr-shot2-ndoc5-42.json
+asqa,recall_repair,46.8179,44.6294,78.3626,62.6028,96.2492,73.2969,90.8464,96.2492,summary_csv
+asqa,v0,45.2989,43.1219,73.8555,59.8295,52.4977,59.0740,28.7192,52.4977,summary_csv
+eli5,base_raw,16.2000,17.6333,40.5267,36.8929,,,,,/home/wanghui/rag/CoverRAG/alce/result/origin/eli5-gpt-4o-mini-bm25-shot2-ndoc5-42.json
+eli5,recall_repair,16.0667,18.5000,47.5609,37.5456,95.9146,68.4332,92.2227,95.9146,summary_csv
+eli5,v0,16.2000,17.6333,40.5267,36.8929,51.3656,67.3061,29.3506,51.3656,summary_csv
+qampari,base_raw,14.8792,8.7186,25.8782,26.4661,,,,,/home/wanghui/rag/CoverRAG/alce/result/origin/qampari-gpt-4o-mini-gtr-shot2-ndoc5-42.json
+qampari,recall_repair,16.2357,9.2591,28.6495,29.0190,97.7337,97.7597,97.7337,97.7337,summary_csv
+qampari,v0,14.8792,8.7186,25.8782,26.4661,27.7041,30.3327,26.1742,27.7041,summary_csv

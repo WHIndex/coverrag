@@ -1,0 +1,131 @@
+\documentclass[lettersize,journal]{IEEEtran}
+\usepackage{amsmath,amsfonts}
+\usepackage{algorithmic}
+\usepackage{algorithm}
+\usepackage{array}
+\usepackage[caption=false,font=normalsize,labelfont=sf,textfont=sf]{subfig}
+\usepackage{textcomp}
+\usepackage{stfloats}
+\usepackage{url}
+\usepackage{verbatim}
+\usepackage{graphicx}
+\usepackage{cite}
+\usepackage{xspace}
+\usepackage{multirow}
+\usepackage[hidelinks]{hyperref}
+\usepackage{balance}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\hyphenation{op-tical net-works semi-conduc-tor IEEE-Xplore}
+% updated with editorial comments 8/9/2021
+
+\newtheorem{definition}{Definition}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}{Lemma}
+\newtheorem{proof}{Proof}[section]
+
+%\SetAlFnt{\scriptsize}	
+%\SetAlCapFnt{\scriptsize}
+%\SetAlCapNameFnt{\scriptsize}
+%\SetFuncSty{textsf}
+
+%\tikzset{help lines/.style={color=gray!30,very thin}}
+\newcommand\subtitle[1]{{\large #1}} 
+\newcommand{\superscript}[1]{\ensuremath{^{\textrm{#1}}}}
+\newcommand{\Rmnum}[1]{\uppercase\expandafter{\romannumeral #1}}  %定义命令输入大写罗马数字
+\newcommand{\rmnum}[1]{\romannumeral #1}  
+%定义命令输入小写罗马数字
+
+\usepackage{adjustbox}
+
+\def\tu{\superscript{\dag}}
+\def\gu{\superscript{\ddag}}
+\def\tulab{\superscript{\S}}
+\def\nulab{\superscript{\P}}
+
+
+\renewcommand{\algorithmicrequire}{ \textbf{Input:}} %Use Input in the format of Algorithm
+\renewcommand{\algorithmicensure}{ \textbf{Output:}} %UseOutput in the format of Algorithm
+
+\newcommand{\ragname}{CoverRAG\xspace}
+
+\begin{document}
+
+% \title{CoverRAG: Claim-Oriented Verification and Evidence-Routed Retrieval-Augmented Generation}
+\title{CoverRAG: Coverage-Guided Claim Verification for Plug-and-Play Retrieval-Augmented Generation}
+
+\author{Jiake Ge,
+        Hui Wang,
+        Xin Wang,~\IEEEmembership{Member,~IEEE,}
+        Yunpeng Chai,~\IEEEmembership{Member,~IEEE}
+        
+
+\IEEEcompsocitemizethanks{\IEEEcompsocthanksitem 
+Jiake Ge is with the School of Artificial Intelligence, Tianjin University, Tianjin 300354, China. E-mail: gejiake@tju.edu.cn.
+Hui Wang is with the School of Computer Software, Tianjin University, Tianjin 300354, China. E-mail: haileywang@tju.edu.cn.
+Yunpeng Chai is with the School of Information, Renmin University of China, Beijing 100872, China. E-mail: ypchai@ruc.edu.cn.
+Xin Wang is with the School of Artificial Intelligence, Tianjin University, Tianjin 300354, China. E-mail: wangx@tju.edu.cn.
+}
+
+% <-this % stops an unwanted space
+}
+
+% The paper headers
+\markboth{Journal of \LaTeX\ Class Files,~Vol.~14, No.~8, August~2024}%
+{Shell \MakeLowercase{\textit{et al.}}: A Sample Article Using IEEEtran.cls for IEEE Journals}
+
+\maketitle
+
+\begin{abstract}
+Retrieval-augmented generation (RAG) improves language models by grounding answers in external evidence, yet retrieved documents that are relevant to a question do not necessarily support every factual claim in the generated answer. This gap is especially problematic for long-form and attributed generation, where an answer may contain many atomic claims, only some of which are actually covered by the cited evidence. We propose \textsc{CoverRAG}, a plug-and-play controller that treats RAG as a claim-level evidence coverage problem. Given a draft answer from any RAG backbone, \textsc{CoverRAG} decomposes it into atomic claims, verifies each claim against evidence, constructs a coverage state over supported and unresolved answer units, plans missing answer-unit targets, retrieves or selects evidence only for those targets, and accepts new content only when it both fills a missing answer unit and is supported by evidence. The final answer is generated from the supported coverage state under citation and output-quality guards. Experiments on ASQA, ELI5, and QAMPARI with vanilla RAG, Self-RAG, and BGE-rerank RAG show that \textsc{CoverRAG} consistently improves claim support and citation faithfulness while preserving or improving main task performance. On the strongest BGE-rerank backbone, \textsc{CoverRAG} improves average main correctness by 0.78 points, sentence-level citation recall by 3.88 points, claim citation recall by 54.07 points, and claim citation precision by 29.26 points.
+\end{abstract}
+
+\begin{IEEEkeywords}
+Retrieval-augmented generation, attributed generation, factuality verification, citation faithfulness, claim verification, plug-and-play RAG.
+\end{IEEEkeywords}
+
+
+\input{cover_introduction}
+\input{cover_related_work}
+\input{cover_preliminaries}
+\input{cover_framework}
+\input{cover_experiment}
+\input{cover_conclusion}
+
+
+
+\bibliography{reference}
+\bibliographystyle{IEEEtran}
+
+
+
+
+% \newpage
+
+% \section{Biography Section}
+% If you have an EPS/PDF photo (graphicx package needed), extra braces are
+%  needed around the contents of the optional argument to biography to prevent
+%  the LaTeX parser from getting confused when it sees the complicated
+%  $\backslash${\tt{includegraphics}} command within an optional argument. (You can create
+%  your own custom macro containing the $\backslash${\tt{includegraphics}} command to make things
+%  simpler here.)
+ 
+% \vspace{11pt}
+
+% \bf{If you include a photo:}\vspace{-33pt}
+% \begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{fig1}}]{Michael Shell}
+% Use $\backslash${\tt{begin\{IEEEbiography\}}} and then for the 1st argument use $\backslash${\tt{includegraphics}} to declare and link the author photo.
+% Use the author name as the 3rd argument followed by the biography text.
+% \end{IEEEbiography}
+
+% \vspace{11pt}
+
+
+
+
+
+
+% \vfill
+
+\end{document}

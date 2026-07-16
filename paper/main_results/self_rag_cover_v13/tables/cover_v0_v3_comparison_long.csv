@@ -1,0 +1,7 @@
+dataset,tag,model,version,task_metric,task_score,str_em,qa_f1,mauve,citation_recall,citation_precision,claim_citation_recall,claim_citation_precision,claim_support_rate,claim_unsupported_rate,draft_claims,final_claims,kept_claims,rejected_claims,recovered_claims,expanded_claims,expansion_success_rate,answer_length,avg_revised_length,avg_doc_pool_size
+asqa,gtr,gpt-4o-mini,v0,str_em,41.9778,41.9778,33.0726,63.4740,77.9800,64.5221,53.7634,54.6882,53.7634,46.2366,4092,4092,,,,,,32.7932,,
+asqa,gtr,gpt-4o-mini,v3,str_em,43.2261,43.2261,32.6665,39.4864,81.2525,69.3626,94.2885,71.9105,94.2885,5.7115,4089,5060,4882,80,190,922,15.7284,40.9821,43.6139,99.8196
+eli5,bm25,gpt-4o-mini,v0,claims_nli,18.6000,0.0000,,19.1540,52.5679,40.2063,63.9324,66.5373,63.9324,36.0676,9704,9704,,,,,,73.6320,,
+eli5,bm25,gpt-4o-mini,v3,claims_nli,18.6000,0.0000,,21.8737,58.1108,43.8517,95.3519,70.0393,95.3519,4.6481,9721,10671,10625,219,605,1168,35.2657,83.4640,88.2250,89.8250
+qampari,gtr,gpt-4o-mini,v0,qampari_f1,16.6022,0.0000,,,35.8761,35.8009,27.0467,27.1093,27.0467,72.9533,3579,3579,,,,,,8.2110,,
+qampari,gtr,gpt-4o-mini,v3,qampari_f1,16.6269,0.0000,,,36.8389,36.9032,94.8193,94.7898,,,,,,,,,,7.9710,,

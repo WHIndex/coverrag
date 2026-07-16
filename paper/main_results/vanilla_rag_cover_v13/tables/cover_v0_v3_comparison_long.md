@@ -1,0 +1,8 @@
+| dataset | tag | model | version | task_metric | task_score | str_em | qa_f1 | mauve | citation_recall | citation_precision | claim_citation_recall | claim_citation_precision | claim_support_rate | claim_unsupported_rate | draft_claims | final_claims | kept_claims | rejected_claims | recovered_claims | expanded_claims | expansion_success_rate | answer_length | avg_revised_length | avg_doc_pool_size |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| asqa | gtr | gpt-4o-mini | v0 | str_em | 45.2989 | 45.2989 | 35.6719 | 66.6372 | 73.8555 | 59.8295 | 52.4977 | 59.0740 | 52.4977 | 47.5023 | 6646 | 6646 |  |  |  |  |  | 55.2036 |  |  |
+| asqa | gtr | gpt-4o-mini | v3 | str_em | 46.8179 | 46.8179 | 35.5031 | 38.5010 | 78.3626 | 62.6028 | 96.2492 | 73.2969 | 96.2492 | 3.7508 | 6629 | 7705 | 7460 | 134 | 483 | 981 | 16.7121 | 63.9652 | 67.5759 | 99.7595 |
+| eli5 | bm25 | gpt-4o-mini | v0 | claims_nli | 16.2000 | 0.0000 |  | 13.6942 | 40.5267 | 36.8929 | 51.3656 | 67.3061 | 51.3656 | 48.6344 | 11387 | 11387 |  |  |  |  |  | 91.5210 |  |  |
+| eli5 | bm25 | gpt-4o-mini | v3 | claims_nli | 16.0667 | 0.0000 |  | 17.0583 | 47.5609 | 37.5456 | 95.9146 | 68.4332 | 95.9146 | 4.0854 | 11387 | 12312 | 12305 | 222 | 1476 | 1174 | 35.2130 | 100.9900 | 107.0240 | 89.4620 |
+| qampari | gtr | gpt-4o-mini | v0 | qampari_f1 | 14.8792 | 0.0000 |  |  | 25.8782 | 26.4661 | 27.7041 | 30.3327 | 27.7041 | 72.2959 | 4678 | 4678 |  |  |  |  |  | 16.6010 |  |  |
+| qampari | gtr | gpt-4o-mini | v3 | qampari_f1 | 16.2357 | 0.0000 |  |  | 28.6495 | 29.0190 | 97.7337 | 97.7597 |  |  |  |  |  |  |  |  |  | 10.3360 |  |  |

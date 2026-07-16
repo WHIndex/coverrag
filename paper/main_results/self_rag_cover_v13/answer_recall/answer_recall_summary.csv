@@ -1,0 +1,7 @@
+dataset,condition,num_items,total_units,hit_units,answer_recall_micro,item_any_rate,item_full_rate,avg_output_words,qampari_num_preds,qampari_precision,qampari_recall_top5,qampari_f1,official_str_em,official_claims_nli,official_qampari_rec,official_qampari_f1,official_citation_recall,official_citation_precision,path
+asqa,base_raw,948,3184,1263,39.6671,74.0506,16.6667,34.2416,,,,,,,,,,,/home/wanghui/rag/CoverRAG/alce/result/api_self_rag_cover_v13_clean_full/self_rag_origin/asqa-self-rag.json
+asqa,v3,948,3184,1308,41.0804,75.3165,17.5105,43.4103,,,,,43.2261,,,,81.2525,69.3626,/home/wanghui/rag/CoverRAG/alce/result/api_self_rag_cover_v13_clean_full/cover_v3/asqa-self-rag.cover_v3.json
+eli5,base_raw,1000,3000,559,18.6333,41.6000,1.8000,76.6670,,,,,,,,,,,/home/wanghui/rag/CoverRAG/alce/result/api_self_rag_cover_v13_clean_full/self_rag_origin/eli5-self-rag.json
+eli5,v3,1000,3000,574,19.1333,42.2000,2.2000,87.7930,,,,,0,18.6000,,,58.1108,43.8517,/home/wanghui/rag/CoverRAG/alce/result/api_self_rag_cover_v13_clean_full/cover_v3/eli5-self-rag.cover_v3.json
+qampari,base_raw,1000,14429,1264,8.7601,48.1000,1.2000,10.8200,3.4290,32.0948,22.2000,16.4708,,,,,,,/home/wanghui/rag/CoverRAG/alce/result/api_self_rag_cover_v13_clean_full/self_rag_origin/qampari-self-rag.json
+qampari,v3,1000,14429,1246,8.6354,48.5000,1.0000,11.2910,3.3310,32.6202,22.1000,16.4954,0,,13.1232,16.6269,36.8389,36.9032,/home/wanghui/rag/CoverRAG/alce/result/api_self_rag_cover_v13_clean_full/cover_v3/qampari-self-rag.cover_v3.json

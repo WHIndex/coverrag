@@ -1,0 +1,90 @@
+\section{The \textsc{CoverRAG} Framework}
+\label{sec:framework}
+
+\textsc{CoverRAG} is a plug-in controller placed after a base RAG generator. It takes a question, a draft answer, and an evidence pool as input, then iteratively updates a claim-level coverage state. The loop is shown in Algorithm~\ref{alg:coverrag}.
+
+\begin{algorithm}[t]
+\caption{\textsc{CoverRAG}: Coverage-Guided Claim Controller}
+\label{alg:coverrag}
+\begin{algorithmic}[1]
+\REQUIRE question $q$, draft answer $\tilde{a}$, evidence pool $\mathcal{E}_0$, retriever or evidence provider $R$, verifier $V$, budget $B$
+\ENSURE final answer $a$ with claim-level citations
+\STATE decompose $\tilde{a}$ into atomic claims $\mathcal{C}^{0}$
+\STATE initialize evidence sets and coverage state $\mathcal{M}^{0}$
+\FOR{$t=0,1,\ldots$ while budget remains}
+    \STATE verify each unresolved or newly added claim in $\mathcal{M}^{t}$
+    \STATE construct supported state $\mathcal{C}^{+,t}$
+    \STATE generate missing answer-unit targets $\mathcal{T}^{t}$
+    \IF{$\mathcal{T}^{t}$ is empty}
+        \STATE break
+    \ENDIF
+    \STATE retrieve or rerank evidence for targets in $\mathcal{T}^{t}$
+    \STATE generate candidate answer-unit claims from new evidence
+    \STATE filter candidates with answer-unit and output guards
+    \STATE verify remaining candidates with $V$
+    \STATE add supported candidates to $\mathcal{M}^{t+1}$
+\ENDFOR
+\STATE render final answer from supported claims and citations
+\STATE audit final answer and remove unsupported residual claims
+\STATE \textbf{return} $a$
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Draft Audit and Claim Verification}
+
+The base RAG system first produces a draft answer. \textsc{CoverRAG} decomposes the draft into atomic claims and verifies them against their cited evidence or the available evidence pool. Verification produces four operational labels: supported, unsupported, no citation, and wrong or missing citation. These labels are stored in the coverage state and determine subsequent actions. Supported claims are preserved. Unsupported or citation-broken claims become possible sources of missing targets. Background claims are down-weighted so that the controller does not waste retrieval budget on low-value details.
+
+\subsection{Supported Answer State}
+
+The supported claims are summarized into an intermediate supported answer state. This state is not a final response. It is a memory of already covered answer units. It plays two roles. First, it prevents the system from retrieving repeatedly for content that is already supported. Second, it gives the generator and retriever a compact context for deciding what remains missing.
+
+\subsection{Missing Target Planning}
+
+The controller builds missing answer-unit targets from two sources. The first source is rejected draft claims: if a draft claim is unsupported, uncited, or wrongly cited, its protected answer spans and salient phrases are treated as candidate missing targets. The second source is evidence: high-ranked evidence sentences may contain answer spans not yet covered by supported claims. These spans are treated as hypothesized missing answer units.
+
+Not every target is retained. The planner removes targets that are already covered by supported claims, duplicated under normalized span keys, too generic, title-like, source-fragment-like, or unrelated to the question. The result is a small set of concrete targets such as an entity, date, number, causal mechanism, condition, or explanatory phrase.
+
+\subsection{Coverage-Guided Retrieval}
+
+For each retained target, \textsc{CoverRAG} constructs a retrieval query that combines the original question, the missing answer unit, optional evidence clues, and a brief supported-answer summary:
+\begin{equation}
+    \bar{q}=\operatorname{Query}(q,\mathrm{target},\mathrm{clue},\mathcal{C}^{+}).
+\end{equation}
+This differs from ordinary query expansion. The query explicitly represents what is already answered and what remains missing. The retriever or candidate evidence provider then returns additional evidence for these target-specific queries.
+
+\subsection{Answer-Unit Gate}
+
+New evidence can contain many supported but irrelevant facts. Therefore, a candidate claim is not accepted merely because it is entailed by evidence. It must first pass an answer-unit gate. The candidate must match a missing target through normalized answer-span keys or lexical overlap, must be relevant to the original question, must expose a concrete answer span, and must avoid generic or title-like surfaces.
+
+We score a candidate by
+\begin{equation}
+\begin{split}
+    s_{\mathrm{unit}} =
+    &0.35s_{\mathrm{target}}
+    +0.25s_{\mathrm{question}}
+    +0.25s_{\mathrm{span}} \\
+    &+0.15s_{\mathrm{rank}}
+    -p_{\mathrm{compact}},
+\end{split}
+\end{equation}
+where $s_{\mathrm{target}}$ measures target match, $s_{\mathrm{question}}$ measures question relevance, $s_{\mathrm{span}}$ rewards explicit answer spans, $s_{\mathrm{rank}}$ uses evidence ranking, and $p_{\mathrm{compact}}$ penalizes overly long, generic, or type-mismatched candidates. Explanation questions use stricter directness checks so that isolated names or titles are not accepted as explanatory coverage.
+
+\subsection{Evidence Verification and Guarded Update}
+
+Only candidates that pass the answer-unit gate are verified by the evidence verifier. A candidate is added to the coverage state only if the verifier labels it as supported. The final renderer then constructs an answer from supported claims, preserving verified draft content and inserting only a small number of high-confidence new claims. A final audit decomposes the rendered answer again and removes residual unsupported claims introduced during verbalization.
+
+The resulting loop can be summarized as:
+\begin{equation}
+\small
+\begin{split}
+&\mathrm{draft}
+\rightarrow \mathrm{claim\ audit}
+\rightarrow \mathrm{supported\ state}
+\rightarrow \mathrm{missing\ targets}\\
+&\rightarrow \mathrm{targeted\ retrieval}
+\rightarrow \mathrm{answer\mbox{-}unit\ gate}
+\rightarrow \mathrm{verification}
+\rightarrow \mathrm{guarded\ update}.
+\end{split}
+\end{equation}
+

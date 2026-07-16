@@ -1,0 +1,114 @@
+\section{Experiments}
+\label{sec:experiments}
+
+\subsection{Experimental Setup}
+
+\textbf{Datasets.} We evaluate on three attributed generation datasets: ASQA, ELI5, and QAMPARI~\cite{gao2023enabling}. They cover ambiguous factoid question answering, long-form explanatory answering, and list-style answer generation.
+
+\textbf{Backbones.} We test \textsc{CoverRAG} as a plug-in controller on three RAG backbones. Vanilla RAG uses the original retrieved top documents and a direct generator. Self-RAG uses a self-reflective generation pipeline~\cite{asai2024self}. BGE-rerank RAG reranks candidate documents with a cross-encoder reranker before generation.
+
+\textbf{Implementation.} Unless otherwise noted, all reported plug-in results use the frozen \textsc{CoverRAG} v13 configuration. This version instantiates the claim audit, supported-state construction, answer-unit candidate gating, evidence verification, citation repair, recall-oriented completion, final audit, and output-selection guards. We use the same v13 controller across backbones.
+
+\textbf{Metrics.} We report main task correctness and main task recall following the dataset evaluator. We also report sentence-level citation recall and precision, claim-level citation recall and precision, claim sentence recall, and claim support. Claim-level metrics are important because sentence-level citation scores can hide unsupported atomic claims inside cited sentences.
+
+\subsection{Overall Results}
+
+\begin{table*}[t]
+    \centering
+    \caption{Average v13 gains over the corresponding v0 backbone across ASQA, ELI5, and QAMPARI. Higher is better for all metrics.}
+    \label{tab:avg_results}
+    \scriptsize
+    \setlength{\tabcolsep}{3pt}
+    \begin{tabular}{lrrrrrrr}
+        \toprule
+        Backbone & Main Corr. & Main Rec. & Sent Cit. R & Sent Cit. P & Claim Cit. R & Claim Cit. P & Claim Support \\
+        \midrule
+        Vanilla RAG & +0.91 & +0.97 & +4.77 & +1.99 & +52.78 & +27.59 & +52.78 \\
+        Self-RAG & +0.42 & +0.60 & +3.26 & +3.20 & +46.57 & +29.47 & +46.57 \\
+        BGE-rerank RAG & +0.78 & +0.80 & +3.88 & +0.44 & +54.07 & +29.26 & +54.07 \\
+        \bottomrule
+    \end{tabular}
+\end{table*}
+
+\autoref{tab:avg_results} summarizes the average gains. \textsc{CoverRAG} improves main correctness and main recall on all three backbones. The gains are moderate, which is expected because the controller is conservative: it rejects candidates that are supported but do not fill a missing answer unit. The larger gains appear in evidence-faithfulness metrics. Claim citation recall improves by 46--54 points, and claim citation precision improves by 27--29 points. This confirms that the controller substantially changes the evidence alignment of generated answers, rather than only rewriting surface text.
+
+\begin{table*}[t]
+    \centering
+    \caption{Detailed v0 vs. \textsc{CoverRAG} v13 results. Corr. and Rec. denote main task correctness and recall. Sent. R/P denote sentence-level citation recall/precision. Claim R/P denote claim-level citation recall/precision. Supp. denotes claim support.}
+    \label{tab:main_results}
+    \scriptsize
+    \setlength{\tabcolsep}{2.5pt}
+    \begin{tabular}{llrrrrrrrr}
+        \toprule
+        Backbone & Dataset & Corr. & Rec. & Sent. R & Sent. P & Claim R & Claim P & Claim Sent. R & Supp. \\
+        \midrule
+        Vanilla v0 & ASQA & 45.30 & 43.12 & 73.86 & 59.83 & 52.50 & 59.07 & 28.72 & 52.50 \\
+        Vanilla + Cover & ASQA & 46.82 & 44.63 & 78.36 & 62.60 & 96.25 & 73.30 & 90.85 & 96.25 \\
+        Vanilla v0 & ELI5 & 16.20 & 17.63 & 40.53 & 36.89 & 51.37 & 67.31 & 29.35 & 51.37 \\
+        Vanilla + Cover & ELI5 & 16.07 & 18.50 & 47.56 & 37.55 & 95.91 & 68.43 & 92.22 & 95.91 \\
+        Vanilla v0 & QAMPARI & 14.88 & 8.72 & 25.88 & 26.47 & 27.70 & 30.33 & 26.17 & 27.70 \\
+        Vanilla + Cover & QAMPARI & 16.24 & 9.26 & 28.65 & 29.02 & 97.73 & 97.76 & 97.73 & 97.73 \\
+        \midrule
+        Self-RAG v0 & ASQA & 41.98 & 39.67 & 77.98 & 64.52 & 53.76 & 54.69 & 31.41 & 53.76 \\
+        Self-RAG + Cover & ASQA & 43.23 & 41.08 & 81.25 & 69.36 & 94.29 & 71.91 & 87.19 & 94.29 \\
+        Self-RAG v0 & ELI5 & 18.60 & 18.63 & 52.57 & 40.21 & 63.93 & 66.54 & 39.96 & 63.93 \\
+        Self-RAG + Cover & ELI5 & 18.60 & 19.13 & 58.11 & 43.85 & 95.35 & 70.04 & 91.27 & 95.35 \\
+        Self-RAG v0 & QAMPARI & 16.60 & 8.76 & 35.88 & 35.80 & 27.05 & 27.11 & 25.49 & 27.05 \\
+        Self-RAG + Cover & QAMPARI & 16.63 & 8.64 & 36.84 & 36.90 & 94.82 & 94.79 & 94.82 & 94.82 \\
+        \midrule
+        BGE-rerank v0 & ASQA & 42.77 & 40.55 & 67.47 & 57.16 & 51.67 & 60.75 & 29.26 & 51.67 \\
+        BGE-rerank + Cover & ASQA & 44.26 & 41.99 & 74.60 & 61.60 & 96.07 & 73.32 & 90.29 & 96.07 \\
+        BGE-rerank v0 & ELI5 & 20.07 & 20.53 & 56.77 & 50.33 & 46.54 & 60.61 & 23.83 & 46.54 \\
+        BGE-rerank + Cover & ELI5 & 20.20 & 21.10 & 59.79 & 45.97 & 96.40 & 68.84 & 93.06 & 96.40 \\
+        BGE-rerank v0 & QAMPARI & 17.07 & 9.53 & 28.20 & 28.76 & 30.24 & 31.22 & 26.92 & 30.24 \\
+        BGE-rerank + Cover & QAMPARI & 17.79 & 9.91 & 29.69 & 30.01 & 98.19 & 98.21 & 98.19 & 98.19 \\
+        \bottomrule
+    \end{tabular}
+\end{table*}
+
+\subsection{Analysis}
+
+\textbf{Main task performance.} \textsc{CoverRAG} improves or preserves main task correctness on most settings. The largest gains appear on ASQA and QAMPARI, where citation-broken or unsupported answer units can be removed or repaired without substantially harming answer completeness. ELI5 is harder: its reference labels reward broad explanatory coverage, so aggressive support filtering can reduce some useful but weakly evidenced explanations. The answer-unit gate mitigates this by allowing only compact and question-relevant additions.
+
+\textbf{Citation faithfulness.} Sentence-level citation recall improves for every backbone and dataset. Sentence precision also usually improves, with one notable trade-off on BGE-rerank ELI5. This case reflects a common tension in long-form explanatory generation: adding supported explanatory content can increase recall while introducing more citation links, some of which are judged less precise at the sentence level. Claim-level metrics show that the added content is nevertheless much better grounded.
+
+\textbf{Claim support.} The largest and most consistent improvement is claim support. Across all backbones, \textsc{CoverRAG} moves claim support from roughly 43--48\% to roughly 95--97\% on average. This supports our central hypothesis: answer-side control should be evaluated at claim granularity, because sentence-level metrics alone understate the grounding improvement.
+
+\textbf{Plug-in behavior.} The controller works on vanilla RAG, Self-RAG, and BGE-rerank RAG without changing their internal generation logic. This suggests that \textsc{CoverRAG} is not tied to a particular retriever. Instead, it complements retrieval-side improvements by adding answer-side coverage control.
+
+\subsection{Ablation Study}
+
+We conduct ablations on the vanilla RAG backbone to isolate the effect of the main controller components. \autoref{tab:ablation} reports macro-average changes over ASQA, ELI5, and QAMPARI relative to the full v13 system. We ablate targeted recovery, recall-oriented completion, evidence/claim expansion, final audit, audit-based output candidate selection, and the verifier type.
+
+\begin{table*}[t]
+    \centering
+    \caption{Macro-average ablation results on vanilla RAG. Values are deltas relative to the full v13 system. Higher is better. Claim-level metrics for \textsc{NoFinalAudit} are unavailable because final-audit claim records are not produced when the audit is disabled.}
+    \label{tab:ablation}
+    \scriptsize
+    \setlength{\tabcolsep}{3pt}
+    \begin{tabular}{lrrrrrrrr}
+        \toprule
+        Setting & Main Corr. & Main Rec. & Sent. R & Sent. P & Claim R & Claim P & Claim Sent. R & Supp. \\
+        \midrule
+        Full v13 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 \\
+        \textsc{NoRecovery} & -0.46 & -0.64 & +2.01 & +5.31 & -3.04 & +8.22 & -7.34 & -3.04 \\
+        \textsc{NoRecallCompletion} & -0.11 & -0.17 & -0.99 & -1.27 & +0.31 & -0.00 & +0.99 & +0.31 \\
+        \textsc{NoExpansion} & -0.47 & -0.81 & -4.08 & -5.14 & +2.12 & +0.30 & +4.56 & +2.12 \\
+        \textsc{NoFinalAudit} & -0.04 & -0.07 & -0.03 & +0.02 & -- & -- & -- & -- \\
+        \textsc{NoCandidateSelection} & -0.00 & -0.02 & +0.01 & -0.06 & -0.10 & -0.20 & -0.07 & -0.10 \\
+        \textsc{LLMVerifier} & +0.34 & +0.17 & +4.20 & +6.62 & -6.06 & +17.93 & -9.95 & -6.06 \\
+        \bottomrule
+    \end{tabular}
+\end{table*}
+
+\textbf{Targeted recovery.} Removing targeted recovery lowers main correctness by 0.46 points and main recall by 0.64 points. It also reduces claim support by 3.04 points and claim sentence recall by 7.34 points. Sentence citation precision increases because the ablated system keeps fewer recovered links and claims, but this comes at the cost of lower answer utility and weaker claim-level coverage. Thus recovery is important for preserving supported answer content.
+
+\textbf{Recall-oriented completion and expansion.} Removing recall-oriented completion alone causes smaller drops in main correctness and recall. Removing expansion more broadly has a larger effect: main correctness drops by 0.47 points, main recall by 0.81 points, and sentence citation recall/precision by 4.08/5.14 points. Claim support increases in the no-expansion setting because the output becomes more conservative. This confirms that expansion is the main utility-oriented component, while verification and recovery are the main faithfulness-oriented components.
+
+\textbf{Final audit and output selection.} Disabling final audit has little effect on main and sentence-level metrics, but it removes final-audit claim records and is therefore not directly comparable for claim-level metrics. A cleaner ablation disables only audit-based output candidate selection while keeping final audit enabled. This has almost no effect on main correctness or recall and only slightly lowers claim-level metrics, suggesting that candidate selection is a stabilizer rather than the main source of the gains.
+
+\textbf{Verifier sensitivity.} Replacing the NLI verifier with an LLM verifier improves main correctness and sentence-level citation scores, but lowers claim support by 6.06 points and claim sentence recall by 9.95 points. The effect is dataset-dependent: LLM verification is more permissive and can improve surface-level answer utility, while the NLI verifier is more conservative for claim-level support. We therefore use the NLI verifier as the default when prioritizing faithful claim coverage.
+
+\subsection{Current Limitations}
+
+The v13 implementation is conservative. It prioritizes evidence support and citation faithfulness over aggressive answer expansion, so main task gains are smaller than claim-support gains. The strongest future direction is to make the missing-answer-unit loop more retrieval-active: after each supported-state update, the controller should issue fresh retrieval queries for still-missing targets and repeat until the marginal answer-unit gain is exhausted. This is the coverage-guided iterative RAG direction discussed in the framework.
