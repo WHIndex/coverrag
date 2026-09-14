@@ -1,3 +1,0 @@
-| dataset | comparison | correctness_delta_mean | correctness_delta_stderr | correctness_n | citation_faithfulness_delta_mean | citation_faithfulness_delta_stderr | citation_faithfulness_n | unsupported_claims_delta_mean | unsupported_claims_delta_stderr | unsupported_claims_n | fluency_delta_mean | fluency_delta_stderr | fluency_n |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| macro | cover_minus_base |  |  | 0 |  |  | 0 |  |  | 0 |  |  | 0 |

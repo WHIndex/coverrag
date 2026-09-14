@@ -1,0 +1,8 @@
+nltk
+numpy
+openai
+rouge-score
+sentencepiece
+torch
+tqdm
+transformers

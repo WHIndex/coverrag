@@ -26,8 +26,8 @@ from transformers import (
 
 from utils import normalize_answer, get_max_memory, remove_citations
 
-QA_MODEL = "/home/wanghui/models/roberta-large-squad"
-AUTOAIS_MODEL = "/home/wanghui/models/t5_xxl_true_nli_mixture"
+QA_MODEL = os.environ.get("QA_MODEL", "gaotianyu1350/roberta-large-squad")
+AUTOAIS_MODEL = os.environ.get("AUTOAIS_MODEL", "google/t5_xxl_true_nli_mixture")
 
 global autoais_model, autoais_tokenizer
 autoais_model, autoais_tokenizer = None, None
@@ -40,6 +40,15 @@ def get_autoais_device():
     if torch.cuda.is_available():
         return torch.device("cuda:0")
     return torch.device("cpu")
+
+
+def get_qa_pipeline_device():
+    requested = os.environ.get("QA_DEVICE")
+    if requested:
+        if requested.lower() == "cpu":
+            return -1
+        return int(requested)
+    return 0 if torch.cuda.is_available() else -1
 
 
 def load_autoais_model():
@@ -237,7 +246,7 @@ def compute_qa(data):
 
     # Load model
     logger.info("Loading the RoBERTa-large SQuAD model for QA-based accuracy...")
-    qa_pipeline = pipeline("question-answering", model=QA_MODEL, device=0)
+    qa_pipeline = pipeline("question-answering", model=QA_MODEL, device=get_qa_pipeline_device())
     logger.info("Done")
 
     # Get prediction

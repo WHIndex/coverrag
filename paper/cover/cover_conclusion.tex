@@ -1,7 +1,0 @@
-\section{Conclusion}
-\label{sec:conclusion}
-
-We introduced \textsc{CoverRAG}, a plug-and-play controller for claim-level evidence coverage in retrieval-augmented generation. The central idea is to control RAG at the level where faithfulness failures occur: atomic answer claims. \textsc{CoverRAG} audits a draft answer, builds a supported coverage state, identifies missing answer-unit targets, retrieves or selects evidence for those targets, verifies candidate additions, and renders a guarded final answer from supported claims.
-
-Experiments on ASQA, ELI5, and QAMPARI show that this answer-side controller consistently improves citation faithfulness and claim support across vanilla RAG, Self-RAG, and BGE-rerank RAG, while preserving or improving main task performance. The results suggest that retrieval relevance and answer faithfulness should be treated as related but distinct objectives. Future work will extend the controller to deeper multi-round retrieval, graph-based evidence backends, and learned policies for allocating verification and retrieval budget.
-

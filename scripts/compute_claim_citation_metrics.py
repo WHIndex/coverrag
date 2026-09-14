@@ -34,7 +34,7 @@ def load_payload(path: Path) -> dict[str, Any]:
 
 
 def final_audit_for(item: dict[str, Any]) -> dict[str, Any] | None:
-    for key in ("cover_v3", "cover_v2", "cover_v1"):
+    for key in ("coverrag", "cover_revision"):
         record = item.get(key)
         if isinstance(record, dict) and isinstance(record.get("final_audit"), dict):
             return record["final_audit"]
